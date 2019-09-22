@@ -9,8 +9,9 @@ export default class AddCityScreen extends React.Component{
       apiKey: '',  
       cityName: "",
       weather: [],
+      main: [],
       sys: [],
-      name: "",
+      city: "",
     }
     
     static navigationOptions = {
@@ -19,33 +20,44 @@ export default class AddCityScreen extends React.Component{
 
     saveCityData = async() => {
       if(
-        this.state.city !== ""
+        this.state.cityName !== ""
       ){
+        this.getWeatherData();
         var cityData = {
           cityName: this.state.cityName,
+          weather: this.state.weather,
+          main: this.state.main,
+          sys: this.state.sys,
+          city: this.state.city,
         }
+        
+        console.log("set data1 " + this.state.weather[0].description);
+        console.log("set data2 " + this.state.sys.type);
       }else{
         Alert.alert("Please enter in a city name.");
       }
-      //await AsyncStorage.setItem( Date.now().toString(),JSON.stringify(cityData))
-      this.getWeatherData();
-      
+      console.log("Got City Data");
+      await AsyncStorage.setItem( Date.now().toString(),JSON.stringify(cityData))
+      .then (()=> {
+        this.props.navigation.goBack()
+      })
+      .catch( (error) => console.log(error))
     }
 
-    componentDidMount(){
-      this.getWeatherData();
-    }
 
     getWeatherData = () => {
       return (
         fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.cityName}${this.state.apiKey}`)
         .then( response => response.json())
         .then( responseJson => {
-          // this.setState({
-          //   isLoading: false,
-          //   dataSource: this.state.dataSource.concat(responseJson.results)
-          // })
-          console.log(responseJson)
+          this.setState({
+            isLoading: false,
+            weather: responseJson.weather,
+            main: responseJson.main,
+            sys: responseJson.sys,
+            city: responseJson.name,
+          });
+          console.log("The response: "+ responseJson.weather[0].description);
         })
         .catch(error => console.log(error))
       )
