@@ -1,19 +1,32 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { Card, CardItem} from 'native-base'; 
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
-}
+import HomeScreen from './screens/HomeScreen';
+import ViewWeatherScreen from './screens/ViewWeatherScreen';
+import AddCityScreen from './screens/AddCityScreen';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const MainNavigator = createStackNavigator(
+  {
+    Home: {screen: HomeScreen},
+    View: {screen: ViewWeatherScreen},
+    Add: {screen: AddCityScreen},
   },
-});
+  {
+    defaultNavigationOptions: {
+      headerTintColor: "#fff",
+      headerStyle: {
+        backgroundColor: "#b83227",
+      },
+      headerTitleStyle: {
+        color: "#fff",
+      }
+    }
+  }
+);
+
+const App = createAppContainer(MainNavigator);
+
+export default App;
