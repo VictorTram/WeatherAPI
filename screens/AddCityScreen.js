@@ -11,11 +11,7 @@ export default class AddCityScreen extends React.Component{
     state = {
       isLoading: true, 
       cityName: "",
-      //apiKey: "",
-      weather: [],
-      main: [],
-      sys: [],
-      city: "",
+      apiResponse: [],
     }
     
     static navigationOptions = {
@@ -23,46 +19,45 @@ export default class AddCityScreen extends React.Component{
     }
 
     saveCityData = async() => {
-      if(
-        this.state.cityName !== ""
-      ){
-        this.getWeatherData();
-        var cityData = {
-          cityName: this.state.cityName,
-          weather: this.state.weather,
-          main: this.state.main,
-          sys: this.state.sys,
-          city: this.state.city,
-        }
-        
-        console.log("set data1 " + this.state.weather.description);
-        console.log("set data2 " + this.state.sys.type);
+      if( this.state.cityName !== ""){
+        await this.getWeatherData();
       }else{
         Alert.alert("Please enter in a city name.");
       }
-      console.log("Got City Data");
-      await AsyncStorage.setItem( Date.now().toString(),JSON.stringify(cityData))
-      .then (()=> {
-        this.props.navigation.goBack()
-      })
-      .catch( (error) => console.log(error))
+      console.log("API ResponseOut " + this.state.apiResponse.cod)
+      // Check if API Response; city not found
+      if(this.state.apiResponse.cod == "404" || this.state.apiResponse.message == "city not found"){
+        Alert.alert("City not found. Please try again.");
+      } else if( this.state.apiResponse.cod == "429"){
+        Alert.alert("Account is blocked");
+      } 
+      else {
+        var cityData = {
+          cityName: this.state.cityName,
+          apiResponse: this.state.apiResponse,
+        }
+        await AsyncStorage.setItem( Date.now().toString(),JSON.stringify(cityData))
+        .then (()=> {
+          this.props.navigation.goBack()
+        })
+        .catch( (error) => console.log(error))
+      }
     }
 
 
     getWeatherData = () => {
       return (
-        fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.cityName}${secretApiKey}`)
+        fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.cityName}&appid=${secretApiKey}`)
         .then( response => response.json())
         .then( responseJson => {
           this.setState({
             isLoading: false,
-            weather: responseJson.weather,
-            main: responseJson.main,
-            //apiKey: secretApiKey,
-            sys: responseJson.sys,
-            city: responseJson.name,
+            apiResponse: responseJson,
           });
-          console.log("The response: "+ JSON.stringify(responseJson));
+          console.log("API Response " + this.state.apiResponse);
+          console.log("responseJson " + JSON.stringify(responseJson));
+
+          
         })
         .catch(error => {
           console.log(error)
