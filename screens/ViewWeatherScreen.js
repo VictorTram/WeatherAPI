@@ -55,7 +55,7 @@ export default class ViewWeatherScreen extends React.Component{
                    <Text style={styles.cityName}>
                        {this.state.cityName}
                    </Text>
-                    <Text style={styles.infoText}>Weather : {this.state.weather.description}</Text>
+                    <Text style={styles.infoText}>Weather : {JSON.stringify(this.state.weather)}</Text>
                     <Text style={styles.infoText}>Temp : {this.state.main.temp}</Text>
                     <Text style={styles.infoText}>Type : {this.state.sys.type}</Text>
                     <Text style={styles.infoText}>City : {this.state.city}</Text>

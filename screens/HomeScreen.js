@@ -116,26 +116,40 @@ export default class HomeScreen extends React.Component{
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  floatButton: {
-      borderWidth: 1,
-      borderColor: "rgba(0,0,0,0.2)",
-      alignItems: "center",
-      justifyContent: "center",
-      width: 60,
-      position: "absolute",
-      bottom: 10,
-      right: 10,
-      height:60,
-      backgroundColor: "#B83227",
-      borderRadius: 100,
-  },
-  actionButton:{
-
-  },
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+    },
+    listItem: {
+        flexDirection: "row",
+        padding: 20,
+    },
+    contactIcon: {
+        width: 60, 
+        height: 60,
+        borderRadius: 100,
+    },
+    infoContainer: {
+        flexDirection: "column",
+    },
+    infoText: {
+        fontSize: 16,
+        fontWeight: "400",
+        paddingLeft: 10,
+        paddingTop: 2,
+    },
+    floatButton: {
+        borderWidth: 1,
+        borderColor: "rgba(0,0,0,0.2)",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 60,
+        position: "absolute",
+        bottom: 10,
+        right: 10,
+        height: 60,
+        backgroundColor: "#74B9FF",
+        borderRadius: 100,
+    }
+  
 });

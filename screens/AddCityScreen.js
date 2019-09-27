@@ -1,13 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, Keyboard, ScrollView, Alert, TouchableWithoutFeedback, AsyncStorage} from 'react-native';
 import { Form, Item, Input, Label, Button, Card, CardItem} from 'native-base'; 
+import {secretApiKey} from '../config';
+
+const apiKey = secretApiKey;
+console.log("test " + JSON.stringify(secretApiKey));
 
 export default class AddCityScreen extends React.Component{
 
     state = {
-      isLoading: true,
-      apiKey: '',  
+      isLoading: true, 
       cityName: "",
+      //apiKey: "",
       weather: [],
       main: [],
       sys: [],
@@ -31,7 +35,7 @@ export default class AddCityScreen extends React.Component{
           city: this.state.city,
         }
         
-        console.log("set data1 " + this.state.weather[0].description);
+        console.log("set data1 " + this.state.weather.description);
         console.log("set data2 " + this.state.sys.type);
       }else{
         Alert.alert("Please enter in a city name.");
@@ -47,19 +51,22 @@ export default class AddCityScreen extends React.Component{
 
     getWeatherData = () => {
       return (
-        fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.cityName}${this.state.apiKey}`)
+        fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.cityName}${secretApiKey}`)
         .then( response => response.json())
         .then( responseJson => {
           this.setState({
             isLoading: false,
             weather: responseJson.weather,
             main: responseJson.main,
+            //apiKey: secretApiKey,
             sys: responseJson.sys,
             city: responseJson.name,
           });
-          console.log("The response: "+ responseJson.weather[0].description);
+          console.log("The response: "+ JSON.stringify(responseJson));
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          console.log(error)
+        })
       )
     }
     

@@ -8,6 +8,7 @@ import HomeScreen from './screens/HomeScreen';
 import ViewWeatherScreen from './screens/ViewWeatherScreen';
 import AddCityScreen from './screens/AddCityScreen';
 
+
 const MainNavigator = createStackNavigator(
   {
     Home: {screen: HomeScreen},
