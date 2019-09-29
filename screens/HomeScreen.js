@@ -75,6 +75,7 @@ export default class HomeScreen extends React.Component{
                             <Card style={styles.listItem}>
                                 <View style={styles.container}>
                                     <Text>{data.cityName}</Text>
+                                    <Text>{data.cod}</Text>
                                 </View>
                                 <CardItem style={styles.actionButton} bordered>
                                     <TouchableOpacity
@@ -85,7 +86,7 @@ export default class HomeScreen extends React.Component{
                                         <Entypo
                                         name = "trash"
                                         size = {50}
-                                        color ="#B83227"
+                                        color ="#74B9FF"
                                         />
                                     </TouchableOpacity>
                                 </CardItem>
