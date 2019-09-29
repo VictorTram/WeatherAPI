@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, ScrollView, View, Image, TouchableOpacity, Linking, Platform, Alert, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, ScrollView, View, Image, TouchableOpacity, Linking, Platform, Alert, FlatList, AsyncStorage } from 'react-native';
 import { Card, CardItem} from 'native-base'; 
 import { Entypo } from '@expo/vector-icons';
 
@@ -9,8 +9,20 @@ export default class ViewWeatherScreen extends React.Component{
         key: "",
         cityName: "DummyText",
         apiResponse: [],
-        
-        
+
+        coord: [],
+        weather: [],
+        base: "",
+        main: [],
+        visibility: "",
+        wind: [],
+        clouds: [],
+        dt: "",
+        sys: [],
+        timezone: "",
+        id: "",
+        name: "",
+        cod: "",
     }
 
     static navigationOptions = {
@@ -36,27 +48,55 @@ export default class ViewWeatherScreen extends React.Component{
             this.setState({
                 cityName: data.cityName,
                 apiResponse: data.apiResponse,
+                coord: data.coord,
+                weather: data.weather,
+                base: data.base,
+                main: data.main,
+                visibility: data.visibility,
+                wind: data.wind,
+                clouds: data.clouds,
+                dt: data.dt,
+                sys: data.sys,
+                timezone: data.timezone,
+                id: data.id,
+                name: data.name,
+                cod: data.cod,
             });
-            console.log("ViewWeatherScreen: After update " + contactJsonString);
+            console.log("ViewWeatherScreen: After update " + this.state.weather[0].main);
+
         })
         .catch( (error) => console.log(error))
     }
-
     
 
     render(){
         return (
-            <ScrollView style={styles.container}>
-               <View style={styles.infoContainer}>
-                   <Text style={styles.cityName}>
-                       {this.state.cityName}
-                   </Text>
-                    <Text style={styles.infoText}>Weather : {JSON.stringify(this.state.apiResponse.name)}</Text>
-                    <Text style={styles.infoText}>Temp : {}</Text>
-                    <Text style={styles.infoText}>Type : {}</Text>
-                    <Text style={styles.infoText}>City : {}</Text>
-               </View>
-               
+            <ScrollView style={styles.infoContainer}>
+                <Text style={styles.cityName}>
+                   {this.state.cityName}
+               </Text>
+               <FlatList
+                data = {this.state.weather}
+                renderItem = { ({item}) => {
+                    console.log(item);
+                    data = item;
+                    iconurl = "http://openweathermap.org/img/w/" + data.icon + ".png";
+                    return (
+                        <View style={styles.container}>
+                            <Text style={styles.infoText}>Weather : {data.main}</Text>
+                            <Text style={styles.infoText}>Type : {data.description}</Text>
+                            <Image source = {{uri: iconurl}} style={{width: 40, height: 40}} />
+                        </View>
+                    )
+                }}
+                keyExtractor = { (item, index) => item.id.toString()}
+                />
+                <Text style={styles.infoText}>
+                    Temp : {this.state.main.temp}
+                </Text>
+                <Text style={styles.infoText}>
+                    City : {this.state.name}, {this.state.sys.country}
+                </Text>
             </ScrollView>
           );
     }
