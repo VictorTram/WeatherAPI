@@ -38,7 +38,7 @@ export default class HomeScreen extends React.Component{
     deleteCity = key => {
         Alert.alert(
             "Delete City Data?",
-            `${this.state.city}`,
+            `${this.state.cityName}`,
             [
                 {
                     text: "Cancel",
@@ -62,6 +62,7 @@ export default class HomeScreen extends React.Component{
                 <FlatList
                 data = {this.state.cityData}
                 renderItem = { ({item}) => {
+                    console.log(item);
                     data = JSON.parse(item[1]);
                     return (
                         <TouchableOpacity
