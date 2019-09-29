@@ -6,12 +6,11 @@ import { Entypo } from '@expo/vector-icons';
 export default class ViewWeatherScreen extends React.Component{
 
     state = {
-        cityName: "DummyText",
-        weather: {},
-        main: {},
-        sys: {},
-        city: "",
         key: "",
+        cityName: "DummyText",
+        apiResponse: [],
+        
+        
     }
 
     static navigationOptions = {
@@ -36,10 +35,7 @@ export default class ViewWeatherScreen extends React.Component{
             data["key"] = key;
             this.setState({
                 cityName: data.cityName,
-                weather: data.weather[0],
-                main: data.main,
-                sys: data.sys,
-                city: data.city,
+                apiResponse: data.apiResponse,
             });
             console.log("ViewWeatherScreen: After update " + contactJsonString);
         })
@@ -55,10 +51,10 @@ export default class ViewWeatherScreen extends React.Component{
                    <Text style={styles.cityName}>
                        {this.state.cityName}
                    </Text>
-                    <Text style={styles.infoText}>Weather : {JSON.stringify(this.state.weather)}</Text>
-                    <Text style={styles.infoText}>Temp : {this.state.main.temp}</Text>
-                    <Text style={styles.infoText}>Type : {this.state.sys.type}</Text>
-                    <Text style={styles.infoText}>City : {this.state.city}</Text>
+                    <Text style={styles.infoText}>Weather : {JSON.stringify(this.state.apiResponse.name)}</Text>
+                    <Text style={styles.infoText}>Temp : {}</Text>
+                    <Text style={styles.infoText}>Type : {}</Text>
+                    <Text style={styles.infoText}>City : {}</Text>
                </View>
                
             </ScrollView>
