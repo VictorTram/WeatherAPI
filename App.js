@@ -4,6 +4,7 @@ import { Card, CardItem} from 'native-base';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 
+import Minimal from './screens/Minimal';
 import HomeScreen from './screens/HomeScreen';
 import ViewWeatherScreen from './screens/ViewWeatherScreen';
 import AddCityScreen from './screens/AddCityScreen';
@@ -11,7 +12,7 @@ import AddCityScreen from './screens/AddCityScreen';
 
 const MainNavigator = createStackNavigator(
   {
-    Home: {screen: HomeScreen},
+    Home: {screen: Minimal},
     View: {screen: ViewWeatherScreen},
     Add: {screen: AddCityScreen},
   },

@@ -3,7 +3,8 @@ import { StyleSheet, Text, Keyboard, ScrollView, Alert, TouchableWithoutFeedback
 import { Form, Item, Input, Label, Button, Card, CardItem} from 'native-base'; 
 import {secretApiKey} from '../config';
 
-const apiKey = secretApiKey;
+// const apiKey = secretApiKey;
+const apiKey = "";
 console.log("test " + JSON.stringify(secretApiKey));
 
 const requestThing =  

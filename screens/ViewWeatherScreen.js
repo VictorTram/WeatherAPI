@@ -3,6 +3,7 @@ import { StyleSheet, Text, ScrollView, View, Image, TouchableOpacity, Linking, P
 import { Card, CardItem} from 'native-base'; 
 import { Entypo } from '@expo/vector-icons';
 
+
 export default class ViewWeatherScreen extends React.Component{
 
     state = {

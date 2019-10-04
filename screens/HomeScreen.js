@@ -1,12 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, AsyncStorage, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, AsyncStorage, Alert, Animated } from 'react-native';
 import { Card, CardItem} from 'native-base'; 
 import { Entypo } from '@expo/vector-icons';
 
+import { SwipeListView } from 'react-native-swipe-list-view';
+
 export default class HomeScreen extends React.Component{
 
+    rowSwipeAnimatedValues = {};
+
     state = {
-        cityData: []
+        cityData: [],
     }
     
     static navigationOptions ={
@@ -18,6 +22,9 @@ export default class HomeScreen extends React.Component{
         navigation.addListener("willFocus", () => {
             this.getAllCityData();
         })
+        Array(20).fill('').forEach((_, i) => {
+			this.rowSwipeAnimatedValues[`${i}`] = new Animated.Value(0);
+		});
     }
 
     getAllCityData = async() => {
@@ -56,61 +63,88 @@ export default class HomeScreen extends React.Component{
         )
     }
 
+
+
+    
+    
     render(){
-        return (
-            <View style={styles.container}>
-                <FlatList
-                data = {this.state.cityData}
-                renderItem = { ({item}) => {
-                    console.log(item);
-                    data = JSON.parse(item[1]);
-                    return (
-                        <TouchableOpacity
-                        onPress = { () => {
-                            this.props.navigation.navigate("View", {
-                                key: item[0].toString()
-                            })
-                        }}
-                        >
-                            <Card style={styles.listItem}>
-                                <View style={styles.container}>
-                                    <Text>{data.cityName}</Text>
-                                    <Text>{data.cod}</Text>
-                                </View>
-                                <CardItem style={styles.actionButton} bordered>
-                                    <TouchableOpacity
-                                    onPress = { () => {
-                                        this.deleteCity(item[0].toString());
-                                    }}
-                                    >
-                                        <Entypo
-                                        name = "trash"
-                                        size = {50}
-                                        color ="#74B9FF"
-                                        />
-                                    </TouchableOpacity>
-                                </CardItem>
-                            </Card>
-
-                        </TouchableOpacity>
-                    )
-                }}
-                keyExtractor = { (item, index) => item[0].toString()}
-                />
-
-                <TouchableOpacity
-                style = {styles.floatButton}
-                onPress = { () => {
-                    this.props.navigation.navigate("Add")
-                }}
-                >
-                    <Entypo
-                    name="plus"
-                    size = {30}
-                    color="#FFF"
+        return (           
+                <View style={styles.container}>
+                    <SwipeListView
+                    useFlatList = {true}
+                    data = {this.state.cityData}
+                    renderItem = { ({item}) => {
+                        console.log(item);
+                        data = JSON.parse(item[1]);
+                        return (
+                            
+                                <TouchableOpacity
+                                onPress = { () => {
+                                    this.props.navigation.navigate("View", {
+                                        key: item[0].toString()
+                                    })
+                                }}>
+                                    <Card style={styles.listItem}>
+                                        <View style={styles.container}>
+                                            <Text>{data.cityName}</Text>
+                                            <Text>{data.cod}</Text>
+                                        </View>                                  
+                                    </Card>
+                                </TouchableOpacity>
+                           
+                        )
+                    }}
+                    renderHiddenItem = { ({item}) => {
+                        console.log("This is item" + item);
+                        
+                        thisdata = {
+                            key: item[0],
+                        };
+                        return (
+                        <CardItem style={styles.actionButton} >
+                            <TouchableOpacity
+                            onPress = { () => {
+                                this.deleteCity(item[0].toString());
+                            }}
+                            style={[{transform: [
+                                {
+                                    scale: this.rowSwipeAnimatedValues['1'].interpolate({
+                                        inputRange: [45, 90],
+                                        outputRange: [0, 1],
+                                        extrapolate: 'clamp',
+                                    }),
+                                }
+                            ]}]}
+                            >
+                                <Entypo
+                                name = "trash"
+                                size = {50}
+                                color ="#74B9FF"
+                                />
+                            </TouchableOpacity>
+                        </CardItem>
+                    )}
+                }
+                    
+                    keyExtractor = { (item, index) => item[0].toString()}
+                    leftOpenValue={75}
+                    rightOpenValue={-75}
                     />
-                </TouchableOpacity>
-            </View>
+
+                    <TouchableOpacity
+                    style = {styles.floatButton}
+                    onPress = { () => {
+                        this.props.navigation.navigate("Add")
+                    }}
+                    >
+                        <Entypo
+                        name="plus"
+                        size = {30}
+                        color="#FFF"
+                        />
+                    </TouchableOpacity>
+                </View>
+                    
           );
     }
 }
@@ -118,6 +152,12 @@ export default class HomeScreen extends React.Component{
 
 
 const styles = StyleSheet.create({
+    newContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     container: {
       flex: 1,
       backgroundColor: '#fff',
@@ -152,6 +192,12 @@ const styles = StyleSheet.create({
         height: 60,
         backgroundColor: "#74B9FF",
         borderRadius: 100,
+    },
+    actionButton:{
+        alignItems: "center",
+        justifyContent: "center",
+        position: "absolute",
+        
     }
   
 });
