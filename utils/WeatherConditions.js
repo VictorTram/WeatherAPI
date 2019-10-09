@@ -36,7 +36,7 @@ export const weatherConditions = {
         icon: 'weather-hail'
       },
       Haze: {
-        color: '#66A6FF',
+        color: '#74B9FF',
         title: 'Haze',
         subtitle: 'Another name for Partial Raining',
         icon: 'weather-hail'

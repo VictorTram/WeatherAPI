@@ -13,6 +13,7 @@
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
+    "react-native-elements": "^1.2.5",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-swipe-list-view": "^2.0.1",
     "react-native-swipeable-row": "^0.8.1",

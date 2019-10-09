@@ -4,7 +4,13 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 
 import {weatherConditions } from '../utils/WeatherConditions';
 
+convertToFahrenheit =(Kelvin)=>{
+
+    return Math.round((Kelvin - 273.15) * 9/5 + 32);
+}
+
 const Weather = ({weather, temperature}) => {
+
     return (
         <View style= {[
             styles.weatherContainer,
@@ -16,7 +22,7 @@ const Weather = ({weather, temperature}) => {
                 name= {weatherConditions[weather].icon}
                 color = "#fff"
                 />
-                <Text style={styles.tempText}> {temperature}</Text>
+                <Text style={styles.tempText}> {convertToFahrenheit(temperature)} °F</Text>
             </View>
             <View style={styles.bodyContainer}> 
                 <Text style={styles.title}> {weatherConditions[weather].title} </Text>

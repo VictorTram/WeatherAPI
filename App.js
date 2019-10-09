@@ -4,17 +4,20 @@ import { Card, CardItem} from 'native-base';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 
+import MainHome from './screens/MainHome';
 import Minimal from './screens/Minimal';
 import HomeScreen from './screens/HomeScreen';
 import ViewWeatherScreen from './screens/ViewWeatherScreen';
-import AddCityScreen from './screens/AddCityScreen';
+import SearchCityScreen from './screens/SearchCityScreen';
 
 
 const MainNavigator = createStackNavigator(
   {
-    Home: {screen: Minimal},
+    Home: {screen: MainHome},
+    AltHome: {screen: HomeScreen},
+    Minimal: {screen: Minimal},
     View: {screen: ViewWeatherScreen},
-    Add: {screen: AddCityScreen},
+    Search: {screen: SearchCityScreen},
   },
   {
     defaultNavigationOptions: {

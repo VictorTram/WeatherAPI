@@ -4,11 +4,11 @@ import {StyleSheet, Text, View } from 'react-native';
 import {secretApiKey} from '../config';
 
 import Weather from '../components/Weather';
+import {dummyData} from '../utils/dummyWeatherData';
+
 
 export default class App extends React.Component{
-
-
-    state ={
+    state = {
         isLoading: true,
         temperature: 0,
         weatherCondition: null,
@@ -53,7 +53,8 @@ export default class App extends React.Component{
 
     render () {
         const { isLoading, weatherCondition, temperature } = this.state;
-
+        const {navigation} = this.props;
+        console.log(navigation.getParam('city'));
         if( !isLoading ){
             return (
                 <View>
@@ -61,16 +62,14 @@ export default class App extends React.Component{
                 </View>
             )
         }
-
         return (
             <View style={styles.container}>
-                <Weather weather='Haze' temperature='25'/>
+                <Weather weather={dummyData[navigation.getParam('city')].weather[0].main} temperature={dummyData[navigation.getParam('city')].main.temp} />
                 {/* <Weather weather={weatherCondition} temperature={temperature}/> */}
             </View>
         )
     }
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
