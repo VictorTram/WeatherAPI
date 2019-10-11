@@ -24,7 +24,7 @@ export default class App extends React.Component{
                             }}
                             /> 
                         <Button
-                            title="Alt Home"
+                            title="Alt Home (Deprecate)"
                             style={styles.button}
                             onPress = { () => {
                                 this.props.navigation.navigate("AltHome")

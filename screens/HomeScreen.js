@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, AsyncStorage, Alert, Animated } from 'react-native';
 import { Card, CardItem} from 'native-base'; 
-import { Entypo, AntDesign } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
-import { SwipeListView} from 'react-native-swipe-list-view';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 export default class HomeScreen extends React.Component{
 
@@ -124,7 +124,8 @@ export default class HomeScreen extends React.Component{
                             </TouchableOpacity>
                         </CardItem>
                     )}
-                }         
+                }
+                    
                     keyExtractor = { (item, index) => item[0].toString()}
                     leftOpenValue={75}
                     rightOpenValue={-75}
@@ -133,11 +134,11 @@ export default class HomeScreen extends React.Component{
                     <TouchableOpacity
                     style = {styles.floatButton}
                     onPress = { () => {
-                        this.props.navigation.navigate("Search")
+                        this.props.navigation.navigate("Add")
                     }}
                     >
-                        <AntDesign
-                        name="search1"
+                        <Entypo
+                        name="plus"
                         size = {30}
                         color="#FFF"
                         />
