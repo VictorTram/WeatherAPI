@@ -131,6 +131,7 @@ export default class SearchCityScreen extends React.Component{
             >
               <View>
                 <SearchBar
+                lightTheme
                 placeholder= "Type City Name here..."
                 onChangeText = {this.updateSearch}
                 value ={search}
@@ -144,8 +145,11 @@ export default class SearchCityScreen extends React.Component{
                         // This sends the key over as a parameter for View
                         console.log("Pressed " + item);
                         
-                        this.props.navigation.navigate('Minimal', {
-                          city: item,})    
+                        // this.props.navigation.goBack();
+                        this.props.navigation.navigate("View",{
+                          city: item,
+                          isLoading: false,
+                        })    
                     }}
                     >
                         <Card style={styles.listItem}>

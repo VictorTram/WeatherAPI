@@ -1,112 +1,160 @@
 import React from 'react';
-import { StyleSheet, Text, ScrollView, View, Image, TouchableOpacity, Linking, Platform, Alert, FlatList, AsyncStorage } from 'react-native';
-import { Card, CardItem} from 'native-base'; 
-import { Entypo } from '@expo/vector-icons';
+import {StyleSheet, Text, View,Button, TouchableOpacity, AsyncStorage, } from 'react-native';
+
+import { Entypo, AntDesign } from '@expo/vector-icons';
+
+import {secretApiKey} from '../config';
+
+import Weather from '../components/Weather';
+import {dummyData} from '../utils/dummyWeatherData';
 
 
 export default class ViewWeatherScreen extends React.Component{
-
     state = {
-        key: "",
-        cityName: "DummyText",
-        apiResponse: [],
-
-        coord: [],
-        weather: [],
-        base: "",
-        main: [],
-        visibility: "",
-        wind: [],
-        clouds: [],
-        dt: "",
-        sys: [],
-        timezone: "",
-        id: "",
-        name: "",
-        cod: "",
+        isLoading: true,
+        temperature: 0,
+        weatherCondition: null,
+        city: "",
+        error: null,
     }
 
     static navigationOptions = {
-        title: "View Page"
+        title: "View"
     }
 
-    componentDidMount(){
-        const { navigation } = this.props;
-        navigation.addListener("willFocus", () => {
-            var key=this.props.navigation.getParam("key","");
-            this.getCityData(key);
-            this.props.navigation.setParams({ title: this.state.cityName})
+    componentWillMount = async() =>{
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                //this.getWeatherData(position.coords.latitude, position.coords.longitude);
+            },
+            error => {
+                this.setState({
+                    error: "Error Getting the Weather Conditions",
+                });
+            }
+        );
+        const {navigation} = this.props;
+        const city= navigation.getParam('city', 'Tokyo');
+        console.log("this is View");
+        this.setState({
+            city: city,
+            temperature: dummyData[city].main.temp,
+            weatherCondition: dummyData[city].weather[0].main,
+            isLoading: false,
         })
 
     }
 
-
-    getCityData = async (key) => {
-        await AsyncStorage.getItem(key)
-        .then( contactJsonString => {
-            var data = JSON.parse(contactJsonString)
-            data["key"] = key;
-            this.setState({
-                cityName: data.cityName,
-                apiResponse: data.apiResponse,
-                coord: data.coord,
-                weather: data.weather,
-                base: data.base,
-                main: data.main,
-                visibility: data.visibility,
-                wind: data.wind,
-                clouds: data.clouds,
-                dt: data.dt,
-                sys: data.sys,
-                timezone: data.timezone,
-                id: data.id,
-                name: data.name,
-                cod: data.cod,
-            });
-            console.log("ViewWeatherScreen: After update " + this.state.weather[0].main);
-
-        })
-        .catch( (error) => console.log(error))
-    }
     
 
-    render(){
+    storeData = async(cityData) => {
+        await AsyncStorage.setItem( Date.now().toString(),JSON.stringify(cityData))
+          .then (()=> {
+            this.props.navigation.navigate("Minimal");
+          })
+          .catch( (error) => console.log(error))
+      }
+
+    // getWeatherData = (lat, lon) => {
+    //     return (
+    //       fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${secretApiKey}`)
+    //       .then( response => response.json())
+    //       .then( responseJson => {
+    //         this.setState({
+    //           isLoading: false,
+    //           temperature: responseJson.main.temp,
+    //           weatherCondition: responseJson.weather[0].main,
+    //         });
+    //         // console.log("API Response " + this.state.apiResponse);
+    //         // console.log("responseJson " + JSON.stringify(responseJson));     
+    //       })
+    //       .catch(error => {
+    //         console.log(error)
+    //       })
+    //     )
+    //   }
+
+    render () {
+        const { isLoading, city, weatherCondition, temperature} = this.state;
+        // if(Object.keys(favorites).length === 0 && (this.props.navigation.getParam('isLoading', true))){
+        //     //this.props.navigation.navigate("Search");
+        //     return (
+        //         <View>
+        //             <Text> Please search for a City to view</Text>
+        //             <Button
+        //             title="Search"
+        //             onPress={()=> this.props.navigation.navigate("Search")}
+        //             />
+        //         </View>
+        //     )      
+        // }
+        if( isLoading ){
+            return (
+                <View>
+                    <Text> Fetching the Weather</Text>
+                </View>
+            )
+        }
+        console.log("condition"+weatherCondition)
         return (
-            <ScrollView style={styles.infoContainer}>
-                <Text style={styles.cityName}>
-                   {this.state.cityName}
-               </Text>
-               <FlatList
-                data = {this.state.weather}
-                renderItem = { ({item}) => {
-                    console.log(item);
-                    data = item;
-                    iconurl = "http://openweathermap.org/img/w/" + data.icon + ".png";
-                    return (
-                        <View style={styles.container}>
-                            <Text style={styles.infoText}>Weather : {data.main}</Text>
-                            <Text style={styles.infoText}>Type : {data.description}</Text>
-                            <Image source = {{uri: iconurl}} style={{width: 40, height: 40}} />
-                        </View>
-                    )
-                }}
-                keyExtractor = { (item, index) => item.id.toString()}
-                />
-                <Text style={styles.infoText}>
-                    Temp : {this.state.main.temp}
-                </Text>
-                <Text style={styles.infoText}>
-                    City : {this.state.name}, {this.state.sys.country}
-                </Text>
-            </ScrollView>
-          );
+            <View style={styles.container}>               
+                <Weather city={city} weather={weatherCondition} temperature={temperature} />
+                {/* <Weather weather={weatherCondition} temperature={temperature}/> */}
+                <TouchableOpacity
+                    style = {styles.likeButton}
+                    onPress = { () => {
+                        this.storeData(city);
+                    }}
+                    >
+                        <AntDesign
+                        name="hearto"
+                        size = {30}
+                        color="#FFF"
+                        />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style = {styles.floatButton}
+                    onPress = { () => {
+                        this.props.navigation.navigate("Search")
+                    }}
+                    >
+                        <AntDesign
+                        name="search1"
+                        size = {30}
+                        color="#FFF"
+                        />
+                </TouchableOpacity>
+            </View>
+        )
     }
 }
-  
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+    },
+    likeButton: {
+        alignItems: "center",
+        justifyContent: "center",
+        width: 60,
+        position: "absolute",
+        top: 10,
+        right: 10,
+        height: 60,
+        backgroundColor: "transparent",
+        borderRadius: 100,
+    },
+    floatButton: {
+        borderWidth: 1,
+        borderColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 60,
+        position: "absolute",
+        bottom: 10,
+        right: 10,
+        height: 60,
+        backgroundColor: "transparent",
+        borderRadius: 100,
+    },
+})
