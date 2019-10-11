@@ -4,7 +4,7 @@ export const dummyData = {
           "lon":139.76,
             "lat":35.68
         },
-       weather:[ 
+       "weather":[ 
             { 
             "id":802,
             "main":"Clouds",
