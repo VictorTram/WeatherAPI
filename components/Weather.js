@@ -5,17 +5,17 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {weatherConditions } from '../utils/WeatherConditions';
 
 convertToFahrenheit =(Kelvin)=>{
-
     return Math.round((Kelvin - 273.15) * 9/5 + 32);
 }
 
-const Weather = ({weather, temperature}) => {
+const Weather = ({city, weather, temperature}) => {
 
     return (
         <View style= {[
             styles.weatherContainer,
             { backgroundColor: weatherConditions[weather].color },
         ]}>
+            <Text style={styles.title}>{city}</Text>
             <View style={styles.headerContainer}>
                 <MaterialCommunityIcons 
                 size={48}
@@ -31,8 +31,6 @@ const Weather = ({weather, temperature}) => {
         </View>
     )
 }
-
-
 
 const styles = StyleSheet.create({
     weatherContainer: {
